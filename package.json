@@ -1,0 +1,27 @@
+{
+  "name": "canva-lite-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "pnpm@9.10.0",
+  "scripts": {
+    "dev": "pnpm -C apps/web dev",
+    "worker": "pnpm -C apps/worker start",
+    "build": "pnpm -C apps/web build && pnpm -C apps/worker build",
+    "docs:build": "tsx packages/scripts/build-readme.ts",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@types/node": "^22.7.4",
+    "eslint": "^9.10.0",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.6",
+    "prettier": "^3.3.3",
+    "tsx": "^4.19.1",
+    "typescript": "^5.5.4"
+  }
+}
