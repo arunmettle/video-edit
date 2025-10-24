@@ -1,16 +1,28 @@
-// Placeholder Prisma schema
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Define your models below
-// model User {
-//   id    Int    @id @default(autoincrement())
-//   email String @unique
-// }
+model Project {
+  id        String   @id @default(uuid())
+  title     String
+  json      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  renders   Render[]
+}
 
+model Render {
+  id        String   @id @default(uuid())
+  projectId String
+  status    String
+  url       String?
+  error     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  project   Project  @relation(fields: [projectId], references: [id])
+}

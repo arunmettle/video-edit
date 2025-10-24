@@ -1,5 +1,13 @@
-// Re-export a PrismaClient instance
+// Export a singleton Prisma client suitable for dev (Next.js) and prod
 import { PrismaClient } from '@prisma/client';
 
-export const prisma = new PrismaClient();
+const globalForPrisma = globalThis as unknown as {
+  prisma?: PrismaClient;
+};
 
+export const prisma: PrismaClient =
+  globalForPrisma.prisma ?? new PrismaClient({});
+
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma;
+}

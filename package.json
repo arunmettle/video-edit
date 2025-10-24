@@ -11,7 +11,9 @@
     "worker": "pnpm -C apps/worker start",
     "build": "pnpm -C apps/web build && pnpm -C apps/worker build",
     "docs:build": "tsx packages/scripts/build-readme.ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "db:generate": "node packages/db/scripts/run-prisma.mjs generate",
+    "db:migrate": "node packages/db/scripts/run-prisma.mjs migrate dev"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.0.0",
