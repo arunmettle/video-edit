@@ -31,6 +31,10 @@ export default function Page() {
   return (
     <main>
       <h1>Hello Canva-lite</h1>
+      <p>
+        <a href="/login">Login</a> · <a href="/register">Register</a> ·{' '}
+        <a href="/editor/sandbox">Editor</a>
+      </p>
       <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
         <button onClick={callHealth}>Check Health</button>
         <span>{health}</span>

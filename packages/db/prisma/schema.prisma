@@ -7,6 +7,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// NextAuth core models (minimal for JWT sessions): User + Account
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  name           String?
+  image          String?
+  hashedPassword String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  accounts       Account[]
+  // App relations
+  projects       Project[]
+}
+
+model Account {
+  id                String   @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @db.Text
+  access_token      String?  @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?  @db.Text
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
 model Project {
   id        String   @id @default(uuid())
   title     String
@@ -14,6 +48,8 @@ model Project {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   renders   Render[]
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 model Render {
