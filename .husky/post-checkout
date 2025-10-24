@@ -1,0 +1,6 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Rebuild README after checking out a branch/commit
+pnpm -s docs:build
+
