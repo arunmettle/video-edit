@@ -1,48 +1,53 @@
-"use client";
+/**
+ * Home page
+ * - Lists current user's projects
+ * - Button to create a new project (client fetch + refresh)
+ */
+import { auth } from '@/auth/config';
+import { prisma } from '@/server/db';
+import NewProjectButton from './new-project-button';
 
-import { useState } from 'react';
-
-export default function Page() {
-  const [health, setHealth] = useState<string>('');
-  const [dbtest, setDbtest] = useState<string>('');
-
-  const callHealth = async () => {
-    setHealth('…');
-    try {
-      const res = await fetch('/api/health', { cache: 'no-store' });
-      const json = await res.json();
-      setHealth(JSON.stringify(json));
-    } catch (e) {
-      setHealth('error');
+export default async function Page() {
+  const session = await auth();
+  const email = session?.user?.email;
+  let projects: { id: string; title: string; updatedAt: Date }[] = [];
+  if (email) {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (user) {
+      projects = await prisma.project.findMany({
+        where: { userId: user.id },
+        orderBy: { updatedAt: 'desc' },
+        select: { id: true, title: true, updatedAt: true },
+      });
     }
-  };
-
-  const callDbTest = async () => {
-    setDbtest('…');
-    try {
-      const res = await fetch('/api/dbtest', { cache: 'no-store' });
-      const json = await res.json();
-      setDbtest(JSON.stringify(json));
-    } catch (e) {
-      setDbtest('error');
-    }
-  };
+  }
 
   return (
     <main>
-      <h1>Hello Canva-lite</h1>
+      <h1>Projects</h1>
       <p>
-        <a href="/login">Login</a> · <a href="/register">Register</a> ·{' '}
-        <a href="/editor/sandbox">Editor</a>
+        {email ? (
+          <>
+            Signed in as {email} · <a href="/editor/sandbox">Sandbox</a>
+          </>
+        ) : (
+          <>
+            <a href="/login">Login</a> · <a href="/register">Register</a>
+          </>
+        )}
       </p>
-      <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-        <button onClick={callHealth}>Check Health</button>
-        <span>{health}</span>
-      </div>
-      <div style={{ display: 'flex', gap: 12, marginTop: 12 }}>
-        <button onClick={callDbTest}>DB Smoke Test</button>
-        <span>{dbtest}</span>
-      </div>
+      {email && <NewProjectButton />}
+      <ul style={{ marginTop: 12 }}>
+        {projects.length ? (
+          projects.map((p) => (
+            <li key={p.id}>
+              <a href={`/editor/${p.id}`}>{p.title}</a> · {new Date(p.updatedAt).toLocaleString()}
+            </li>
+          ))
+        ) : (
+          <li>No projects</li>
+        )}
+      </ul>
     </main>
   );
 }
