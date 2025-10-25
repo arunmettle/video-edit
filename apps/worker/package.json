@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "bullmq": "^5.30.1",
-    "@canva-lite/db": "workspace:*"
+    "@canva-lite/db": "workspace:*",
+    "@aws-sdk/client-s3": "^3.679.0"
   },
   "devDependencies": {
     "tsx": "^4.19.1"

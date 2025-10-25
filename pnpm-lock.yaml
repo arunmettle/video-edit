@@ -93,6 +93,9 @@ importers:
 
   apps/worker:
     dependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.679.0
+        version: 3.917.0
       '@canva-lite/db':
         specifier: workspace:*
         version: link:../../packages/db

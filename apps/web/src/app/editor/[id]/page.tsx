@@ -6,6 +6,7 @@
 import { auth } from '@/auth/config';
 import { prisma } from '@/server/db';
 import UploadPanel from './upload-panel';
+import ExportButton from './export-button';
 import { redirect } from 'next/navigation';
 
 export default async function EditorPage({ params }: { params: { id: string } }) {
@@ -43,7 +44,10 @@ export default async function EditorPage({ params }: { params: { id: string } })
         </div>
       </section>
       <footer style={{ borderTop: '1px solid #ddd', padding: 12 }}>
-        <strong>Timeline</strong>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <strong>Timeline</strong>
+          <ExportButton projectId={project.id} />
+        </div>
         <ul>
           {clips.length ? clips.map((c: any, i: number) => <li key={i}>{JSON.stringify(c)}</li>) : <li>Empty</li>}
         </ul>
