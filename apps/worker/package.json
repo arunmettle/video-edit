@@ -10,8 +10,11 @@
     "start:prod": "node dist/index.js",
     "lint": "eslint ."
   },
+  "dependencies": {
+    "bullmq": "^5.30.1",
+    "@canva-lite/db": "workspace:*"
+  },
   "devDependencies": {
     "tsx": "^4.19.1"
   }
 }
-
